@@ -27,8 +27,8 @@ jobs:
 
       - name: Commit e Push do histórico
         run: |
-          git config user.name "doc-agent-OpenAI"
-          git config user.email "doc-agent@OpenAI.com"
+          git config --global user.name "Agent-doc"
+          git config --global user.email "actions@github.com"
           git add HISTORICO.md
           git commit -m "doc: Resumo automático do último commit"
           git push

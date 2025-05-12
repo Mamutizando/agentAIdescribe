@@ -12,10 +12,11 @@ const openai = new OpenAI({
 async function gerarResumo() {
   const autor = execSync("git log -1 --pretty=format:'%an'").toString().trim();
   const data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-  const diff = execSync("git diff HEAD~1 HEAD").toString();
+  const diff = execSync("git diff HEAD").toString();
 
   const prompt = `
-Você é um assistente que escreve resumos de código. Baseado nas mudanças abaixo (git diff), gere um resumo amigável do que foi alterado.
+Você é um Analista de Qualidade com 10 anos de experiência, que desenvolve automação de testes E2E no playwright e tem que escrever resumos de código, 
+a partir das alterações commitadas. Baseado nas mudanças abaixo (git diff), gere um resumo simples, mas detalhado do que foi alterado.
 
 Autor: ${autor}
 Data: ${data}
