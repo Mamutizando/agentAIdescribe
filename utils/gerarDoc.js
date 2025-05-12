@@ -25,7 +25,7 @@ ${diff}
 `;
 
   const completion = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "gpt-3.5", // Altere para gpt-3.5
     messages: [{ role: "user", content: prompt }],
   });
 
