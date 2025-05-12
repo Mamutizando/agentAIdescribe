@@ -1,14 +1,11 @@
 # Automação de Testes - Loja Integrada
-
 Este projeto contém scripts de automação para a Loja Integrada, utilizando o framework [Playwright](https://playwright.dev/).
 
 ## Pré-requisitos
-
 - Node.js (versão 16 ou superior)
 - Gerenciador de pacotes npm
 
 ## Instalação
-
 1. Instale as dependências do projeto:
    ```bash
    npm install
@@ -20,7 +17,6 @@ Este projeto contém scripts de automação para a Loja Integrada, utilizando o 
    ```
 
 ## Como executar os testes
-
 1. Para rodar todos os testes:
    ```bash
    npx playwright test
@@ -47,7 +43,6 @@ Este projeto contém scripts de automação para a Loja Integrada, utilizando o 
    ```
 
 ## Estrutura do Projeto
-
 - `pages/`: Contém as classes que representam as páginas da aplicação.
 - `utils/`: Contém funções auxiliares para os testes.
 - `tests/`: Contém os arquivos de teste.

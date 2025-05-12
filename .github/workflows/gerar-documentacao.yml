@@ -2,7 +2,7 @@ name: Gerar Documentação Automática
 
 on:
   push:
-    branches: [ "main" ]  # ou a branch padrão do seu time
+    branches: [ "master" ]  # ou a branch padrão do seu time
 
 jobs:
   gerar-documentacao:
@@ -27,8 +27,8 @@ jobs:
 
       - name: Commit e Push do histórico
         run: |
-          git config user.name "doc-bot-OpenAI"
-          git config user.email "doc-bot@agentOpenAI.com"
+          git config user.name "doc-agent-OpenAI"
+          git config user.email "doc-agent@OpenAI.com"
           git add HISTORICO.md
           git commit -m "doc: Resumo automático do último commit"
           git push
