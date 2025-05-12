@@ -1,59 +1,39 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { Configuration, OpenAIApi } = require("openai");
-require("dotenv").config();
+const dotenv = require("dotenv");
+const OpenAI = require("openai");
 
-// Configurar chave da OpenAI
-const configuration = new Configuration({
+dotenv.config();
+
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
-function getGitDiff() {
-  return execSync("git diff HEAD~1 HEAD").toString();
-}
+async function gerarResumo() {
+  const autor = execSync("git log -1 --pretty=format:'%an'").toString().trim();
+  const data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  const diff = execSync("git diff HEAD~1 HEAD").toString();
 
-function getCommitAuthor() {
-  return execSync("git log -1 --pretty=format:%an").toString();
-}
-
-function getCommitDate() {
-  return execSync("git log -1 --date=iso --pretty=format:%cd").toString();
-}
-
-async function gerarResumo(diff) {
   const prompt = `
-Explique em linguagem simples e técnica o que foi alterado no código abaixo.
-Explique o que foi feito, como foi feito e por quê, em formato de tópicos.
+Você é um assistente que escreve resumos de código. Baseado nas mudanças abaixo (git diff), gere um resumo amigável do que foi alterado.
 
-\`\`\`diff
+Autor: ${autor}
+Data: ${data}
+Mudanças:
 ${diff}
-\`\`\`
 `;
 
-  const resposta = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4",
     messages: [{ role: "user", content: prompt }],
-    temperature: 0.5,
   });
 
-  return resposta.data.choices[0].message.content;
+  const resposta = completion.choices[0].message.content;
+
+  const markdown = `## [${data}] por ${autor}\n\n${resposta}\n\n---\n`;
+
+  fs.appendFileSync("HISTORICO.md", markdown);
+  console.log("✅ Histórico atualizado com IA");
 }
 
-function adicionarNoHistorico(resumo, autor, data) {
-  const formatada = new Date(data).toLocaleString("pt-BR");
-  const entrada = `\n## [${formatada}] por ${autor}\n\n**Resumo das alterações:**\n${resumo}\n\n---\n`;
-
-  fs.appendFileSync("HISTORICO.md", entrada, "utf-8");
-}
-
-async function main() {
-  const diff = getGitDiff();
-  const autor = getCommitAuthor();
-  const data = getCommitDate();
-  const resumo = await gerarResumo(diff);
-
-  adicionarNoHistorico(resumo, autor, data);
-}
-
-main().catch(console.error);
+gerarResumo();
