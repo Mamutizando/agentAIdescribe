@@ -1,0 +1,12 @@
+name: Pull Request Notification
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+
+jobs:
+  run-reusable-workflow:
+    uses: lojaintegrada/reusable-workflows/.github/workflows/pr-notification.yml@main
+    with:
+      slack_channel_id: "C057N46SNDS"
+    secrets: inherit

@@ -1,0 +1,45 @@
+name: Playwright Manual
+on:
+  workflow_dispatch:
+jobs:
+  playwright:
+    strategy:
+      fail-fast: false
+      matrix:
+
+        shard: [1, 2, 3, 4, 5] 
+
+    name: "Playwright Tests - pwc"
+    timeout-minutes: 60
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}   
+
+      # Configuração do Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build da imagem Docker com o Dockerfile
+      - name: Build Docker image
+        env:
+          #CURRENTS_PROJECT_ID: Yi3AkU
+          CURRENTS_RECORD_KEY: ${{ secrets.PLAYWRIGHT_CURRENTS_TOKEN }}
+          CURRENTS_CI_BUILD_ID: reporter-${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}      
+        run: |
+          docker build \
+          --build-arg PROJETO=stage \
+          --build-arg SHARD=${{ matrix.shard }}/${{ strategy.job-total }} \
+          --build-arg CURRENTS_KEY=${{ ENV.CURRENTS_RECORD_KEY }} \
+          --build-arg CURRENTS_BUILD=${{ ENV.CURRENTS_CI_BUILD_ID }} \
+          --build-arg GREP='--grep @smoke' \
+          -t playwright-test .
+
+      # Rodar o contêiner com os testes Playwright
+      - name: Run Playwright tests
+        run: |
+          docker run --rm playwright-test        
+        

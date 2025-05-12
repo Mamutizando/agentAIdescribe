@@ -1,0 +1,149 @@
+name: Playwright Tests
+
+on:
+    workflow_call:
+      inputs:
+        actor:
+          required: true
+          type: string
+        ref_name:
+          required: true
+          type: string
+        ref:
+          required: true
+          type: string
+        event_name:
+          required: true
+          type: string
+        url_repo:
+          required: true
+          type: string
+        commit_url:
+          required: true
+          type: string
+        branch_url:
+          required: true
+          type: string
+        commit_message:
+          required: true
+          type: string
+        sha:
+          required: true
+          type: string
+        healthcheck_url:
+          required: true
+          type: string
+        project:
+          required: true
+          type: string         
+jobs:
+
+  check-build-tag: 
+    name: check deploy
+    runs-on: self-hosted
+    outputs:
+      TagEnvApp: ${{ steps.step_tag_env.outputs.TagEnv }}
+      TagFilterApp: ${{ steps.step_tag_env.outputs.Tagfilter }}
+    steps:
+      - name: Set TagEnv Script
+        id: step_tag_env
+        shell: bash
+        run: |
+            if [[ ${{inputs.project}} == *app-loja* ]]; then        
+              if [[ ${{inputs.ref_name}} != *staging* ]]; then
+                echo "TagEnv=prod" >> $GITHUB_OUTPUT
+                echo "Tagfilter=--grep-invert @dontRunProd" >> $GITHUB_OUTPUT
+                echo "HeathCheckURL=http://qastore.production.awsli.com.br?$(date +%s)" >> $GITHUB_OUTPUT               
+              else
+                echo "TagEnv=stage" >> $GITHUB_OUTPUT
+                echo "Tagfilter=--grep @smoke" >> $GITHUB_OUTPUT
+                echo "HeathCheckURL=https://qastore.lojaintegrada-staging.com.br?$(date +%s)" >> $GITHUB_OUTPUT
+              fi
+            else
+              echo "TagEnv=stage" >> $GITHUB_OUTPUT
+              echo "Tagfilter=--grep '@smoke|@cart'" >> $GITHUB_OUTPUT            
+              echo "HeathCheckURL=${{inputs.healthcheck_url}}" >> $GITHUB_OUTPUT
+            fi  
+
+      - name: verify tag
+        shell: bash
+        run: |
+          found=false
+          VERSION=$(echo ${{inputs.ref_name}} | tr '.' '-')
+          echo $VERSION
+          for i in {1..20}; do
+              OUTPUT=$(curl -s --request GET --head -H 'Cache-Control: no-cache, no-store' ${{ steps.step_tag_env.outputs.HeathCheckURL }}  | grep -i ^x-li-version: | cut -d: -f2-)
+              echo $OUTPUT
+              if [[ "$OUTPUT"  == *"$VERSION"* ]]
+              then
+                  echo 'Ambiente atualizado'
+                  found=true
+                  break
+              else
+                  echo 'aguardando atualizacao ambiente..'
+                  sleep 10
+              fi
+          done
+          if [ "$found" == false ]; then
+            echo 'deu ruim, ambiente nao atualizado...'
+            exit 1
+          fi
+
+
+  playwright-run:
+    needs: check-build-tag
+    name: "Playwright Tests - pwc"
+    timeout-minutes: 60
+    runs-on: self-hosted
+
+    env:
+      buildId: ${{ inputs.actor }}-${{ inputs.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+      COMMIT_INFO_BRANCH: ${{inputs.ref_name}}
+      COMMIT_INFO_MESSAGE: "${{inputs.event_name}} - ${{inputs.commit_message}}"
+      COMMIT_INFO_AUTHOR: ${{inputs.actor}}
+      COMMIT_INFO_SHA: ${{inputs.sha}}
+      COMMIT_INFO_REMOTE: ${{inputs.branch_url}}
+      PROJETO: ${{needs.check-build-tag.outputs.TagEnvApp}}
+      FILTER_GREP: ${{needs.check-build-tag.outputs.TagFilterApp}}         
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5]       
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: "lojaintegrada/tst-playwright"
+          token: ${{secrets.GITFLOW_ACCESS_TOKEN}}            
+          ref: ${{ github.event.pull_request.head.sha }}      
+        
+      # Configuração do Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build da imagem Docker com o Dockerfile
+      - name: Build Docker image
+        env:
+          CURRENTS_RECORD_KEY: ${{ secrets.PLAYWRIGHT_CURRENTS_TOKEN }}
+          CURRENTS_CI_BUILD_ID: reporter-${{ env.buildId }}      
+        run: |
+          docker build \
+            --build-arg PROJETO='${{ env.PROJETO }}' \
+            --build-arg SHARD='${{ matrix.shard }}/${{ strategy.job-total }}' \
+            --build-arg CURRENTS_KEY='${{ ENV.CURRENTS_RECORD_KEY }}' \
+            --build-arg CURRENTS_BUILD='${{ ENV.CURRENTS_CI_BUILD_ID }}' \
+            --build-arg GREP='${{ env.FILTER_GREP }}' \
+            --build-arg INFO_BRANCH='${{ env.COMMIT_INFO_BRANCH }}' \
+            --build-arg INFO_MESSAGE='${{ env.COMMIT_INFO_MESSAGE }}' \
+            --build-arg INFO_AUTHOR='${{ env.COMMIT_INFO_AUTHOR }}' \
+            --build-arg INFO_SHA='${{ env.COMMIT_INFO_SHA }}' \
+            --build-arg INFO_REMOTE='${{ env.COMMIT_INFO_REMOTE }}' \
+            -t playwright-test .
+
+      # Rodar o contêiner com os testes Playwright
+      - name: Run Playwright tests
+        run: |
+          docker run --rm playwright-test        
