@@ -1,0 +1,16 @@
+
+{
+  "precosegmentado": {
+    "nameStore": "qastore-automation-segmentado",
+    "product": {
+      "productFreeShippingForProduct": "283074249",
+      "nameProductDefault": "[Automacao] Baldurs Gate",
+      "nameProductDefault2": "[Automacao] Call of Duty®: Modern Warfare® III - Pacote Multigeração",
+      "idProductDefault": "283074278"
+    },
+    "user": {
+      "userMadruga08": "madruguinhatest8@mailinator.com",
+      "password": "Qa2023!"
+    }
+  }
+}

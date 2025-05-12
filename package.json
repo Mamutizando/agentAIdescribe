@@ -1,0 +1,25 @@
+{
+  "name": "tst-automation-loja",
+  "version": "1.0.0",
+  "scripts": {
+    "stg-smoke": "npx playwright test  --project=stage --grep @smoke",
+    "prod-smoke": "npx playwright test  --project=prod --grep @smoke",
+    "gerar-doc": "node scripts/gerarDoc.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@currents/playwright": "^1.9.1",
+    "@faker-js/faker": "^9.5.0",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.13.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "openai": "^4.98.0"
+  }
+}

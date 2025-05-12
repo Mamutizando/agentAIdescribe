@@ -1,0 +1,79 @@
+{
+  "fretegratisautomation": {
+    "urlStore": "qastore-automation-fretegratis",
+    "product": [
+      {
+        "idProduct": "246567168",
+        "description": "[Por região] - Produto simples",
+        "sku": " CCXA2SLPU",
+        "price": "100,00"
+      },
+      {
+        "idProduct": "246576783",
+        "description": "[Por região] - Produto com variação",
+        "sku": "STYB74GYL",
+        "price": "110,00"
+      },
+      {
+        "idProduct": "246660365",
+        "description": "[Promoção] - Por produto",
+        "sku": "N4C9R8VPU",
+        "price": "120,00"
+      },
+      {
+        "idProduct": "246660590",
+        "description": "[Pormoção] - Por categoria",
+        "sku": "QSUM95FV8",
+        "price": "120,00"
+      },
+      {
+        "idProduct": "246572702",
+        "description": "[Por produto] - Produto simples",
+        "sku": "AASKZJAV4",
+        "price": "100,00"
+      },
+      {
+        "idProduct": "246576944",
+        "description": "[Por produto] - Produto com variação",
+        "sku": "JPPLT86JA-amarelo",
+        "price": "110,00"
+      },
+      {
+        "idProduct": "247533121",
+        "description": "Produto extra",
+        "sku": "QM9LA7L2K",
+        "price": "150,00"
+      },
+      {
+        "idProduct": "246572756",
+        "description": "[Por categoria] - Produto simples",
+        "sku": "XCDVAA87P",
+        "price": "100,00"
+      },
+      {
+        "idProduct": "246577042",
+        "description": "[Por categoria] - Produto com variação",
+        "sku": " KFQ2Q89UR-electric-lime",
+        "price": "110,00"
+      }
+    ], 
+    "cupons":[
+        {
+            "code": "VALORFIXO10" 
+        },
+        {
+            "code": "VALORPERCENTUAL10" 
+        },
+        {
+            "code": "FRETEGRATIS" 
+        }
+    ],
+    "activeRegionZipCode": "01153000",
+    "disabledRegionZipCode": "29100-000",
+    "zipCode":"20100-000",
+    "freeShipping": "Frete Grátis",
+    "pickUpInPerson": "Retirar pessoalmente",
+    "correios": "Correios PAC",
+    "motoboy": "Motoboy"
+  }
+}

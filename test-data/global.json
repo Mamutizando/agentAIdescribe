@@ -1,0 +1,29 @@
+{
+    "deliveryType": {
+      "pickUpStore": "Retirada",
+      "pickUpInPerson": "Retirar Pessoalmente",
+      "pac": "PAC"
+    },
+    "paymentType": {
+      "cash": "Dinheiro",
+      "bankSlip": "Boleto",
+      "pix": "PIX"
+    },
+    "loremIpsum": {
+      "word": "Paralelepípedo Amassado",
+      "characters256": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nunc leo, laoreet sed auctor non, elementum nec nibh. In pretium gravida iaculis. In augue purus, rhoncus non faucibus at, pulvinar a est. Vestibulum mattis erat sit amet ultrices convallis donecwew"
+    },
+    "color": {
+      "black": "#000000"
+    },
+    "path": {
+      "base": "carrinho/index",
+      "baseCart": "carrinho/produto/",
+      "cartAdd": "carrinho/produto/adicionar?",
+      "cartRemove": "remover",
+      "login": "conta/login",
+      "register": "conta/cadastro",
+      "logout": "conta/logout"
+    }
+  }
+  

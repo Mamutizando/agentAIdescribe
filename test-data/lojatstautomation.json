@@ -1,0 +1,38 @@
+{
+    "loja": {
+        "nameStore": "qastore-automation-tst",
+        "products": {
+            "productTest": "categoria-produto-com-categoria-principal-1-nivel",
+            "idProductDefaultLoadTest": "215761015",
+            "nameProductDefaultLoadTest": "QA Produto - Load Test 399",
+            "nameProductDefault": "[Geral] Produto com cadastro completo"
+        }
+    },
+    "users": {
+        "userMadruga": "MADRUGUINHATEST@MAILINATOR.COM",
+        "userMadruga02": "madruguinhatest2@mailinator.com",
+        "userMadruga03": "madruguinhatest3@mailinator.com",
+        "userMadruga04": "madruguinhatest4@mailinator.com",
+        "userMadruga07": "madruguinhatest7@mailinator.com",
+        "userMadruga08": "madruguinhatest8@mailinator.com",
+        "userMadruga09": "madruguinhatest9@mailinator.com",
+        "userMadruga11": "madruguinhatest11@mailinator.com",
+        "senhaMadruga": "Qa2023!",
+        "nameClient": "teste",
+        "loginWithGroupCoupon": "clientecomgrupoparacupom@mailinator.com",
+        "loginWithGroupCoupon2": "clientecomgrupoparacupom2@mailinator.com",
+        "loginWithGroupCoupon3": "clientecomgrupoparacupom3@mailinator.com",
+        "loginWithGroupCoupon4": "clientecomgrupoparacupom4@mailinator.com",
+        "passwordWithGroupCoupon": "QAli@123",
+        "loginWithoutCoupon": "usuariosemcupomoupromocao@mailinator.com",
+        "loginWithoutCouponCNPJ":"usercnpjsemcupom@mailinator.com",
+        "loginWithoutCouponSameCNPJ":"usersamecnpjsemcupom@mailinator.com",
+        "passwordWithoutCoupon": "QAli@1234"
+    },
+    "order": {
+        "pacMadruga": "1959",
+        "sedexMadruga": "2017",
+        "envialiPacMadruga": "2012",
+        "envialiSedexMadruga": "2018"
+    }
+}

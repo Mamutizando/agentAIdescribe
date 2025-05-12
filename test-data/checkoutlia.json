@@ -1,0 +1,12 @@
+{
+  "checkoutlia": {
+    "nameStore": "qastore-automation-checkoutlia",
+    "cartaoSalvoLia": "•••• •••• •••• 0741",
+    "cartaoSalvoLia2": "•••• •••• •••• 5427", 
+    "user": {
+      "loginClienteFrequente": "clientefrequente@mailinator.com",
+      "senhaClienteFrequente": "QAli2023",
+      "loginContaExistenteSecundaria": "contaexistentesecundaria@mailinator.com"
+    }
+  }
+}
