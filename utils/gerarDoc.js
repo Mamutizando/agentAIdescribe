@@ -15,18 +15,18 @@ async function gerarResumo() {
   const diff = execSync("git diff HEAD").toString();
 
   const prompt = `
-Você é um Analista de Qualidade com 10 anos de experiência, que desenvolve automação de testes E2E no playwright e tem que escrever resumos de código, 
-a partir das alterações commitadas. Baseado nas mudanças abaixo (git diff), gere um resumo simples, mas detalhado do que foi alterado.
+    Você é um Analista de Qualidade com 10 anos de experiência, que desenvolve automação de testes E2E no playwright e tem que escrever resumos de código, 
+    a partir das alterações commitadas. Baseado nas mudanças abaixo (git diff), gere um resumo simples, mas detalhado do que foi alterado.
 
-Autor: ${autor}
-Data: ${data}
-Mudanças:
-${diff}
-`;
+    Autor: ${autor}
+    Data: ${data}
+    Mudanças:
+    ${diff}
+  `;
 
   const completion = await openai.chat.completions.create({
-    model: "text-davinci-003",
-    messages: [{ role: "user", content: prompt }],
+    model: "OpenAI-Beta: assistentes=v2",
+    messages: [{ role: "user", content: "Escreva um resumo para meu código." }],
   });
 
   const resposta = completion.choices[0].message.content;
