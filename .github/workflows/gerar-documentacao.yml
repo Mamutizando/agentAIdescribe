@@ -23,7 +23,6 @@ jobs:
       - name: Executar script de documentação
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          CURRENTS_CI_BUILD_ID: reporter-${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}
         run: npm run gerar-doc
 
       - name: Commit e Push do histórico
