@@ -25,8 +25,8 @@ async function gerarResumo() {
   `;
 
   const completion = await openai.chat.completions.create({
-    model: "OpenAI-Beta: assistentes=v2",
-    messages: [{ role: "user", content: "Escreva um resumo para meu código." }],
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
   });
 
   const resposta = completion.choices[0].message.content;
