@@ -48,10 +48,16 @@ ${resposta}
     fs.appendFileSync("HISTORICO.md", markdown);
     console.log("✅ Histórico atualizado com IA");
 
-    // Realizar um novo commit
-    execSync("git add HISTORICO.md");
-    execSync(`git commit -m "Atualiza HISTORICO.md com resumo gerado pela IA"`);
-    console.log("✅ Novo commit criado para o histórico");
+    // Verificar se houve alteração no HISTORICO.md
+    const historicoStatus = execSync("git status --porcelain HISTORICO.md").toString().trim();
+
+    if (historicoStatus) {
+      execSync("git add HISTORICO.md");
+      execSync("git commit -m 'Atualiza HISTORICO.md com resumo gerado pela IA'");
+      console.log("✅ Novo commit criado para o histórico");
+    } else {
+      console.log("Nenhuma alteração no HISTORICO.md para commitar.");
+    }
   } catch (error) {
     console.error("❌ Ocorreu um erro ao gerar o resumo:", error.message);
   }
