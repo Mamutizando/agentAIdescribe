@@ -18,14 +18,13 @@ async function gerarResumo() {
   try {
     const autor = execSync("git log -1 --pretty=format:'%an'").toString().trim();
     const data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-    const diff = execSync("git diff HEAD").toString();
+    const diff = execSync("git diff HEAD^ HEAD").toString();
 
     // Limitar o tamanho do diff para reduzir custos
     const diffLimitado = diff.split("\n").slice(0, 50).join("\n");
 
     const prompt = `
-      Você é um Analista de Qualidade com 10 anos de experiência, que desenvolve automação de testes E2E no playwright e tem que escrever resumos de código, 
-      a partir das alterações commitadas. Baseado nas mudanças abaixo (git diff), gere um resumo simples, mas detalhado do que foi alterado.
+      Você é um Analista de Qualidade com 10 anos de experiência, especializado em automação de testes E2E no Playwright. A partir das mudanças commitadas, gere um resumo em tópicos, destacando cada alteração de forma clara e objetiva.
 
       Autor: ${autor}
       Data: ${data}
@@ -34,19 +33,46 @@ async function gerarResumo() {
     `;
 
     const completion = await openai.chat.completions.create({
-      model: "dall-e-3",
+      model: "gpt-4",
       messages: [{ role: "user", content: prompt }],
     });
 
     const resposta = completion.choices[0].message.content;
 
-    const markdown = `## [${data}] por ${autor}\n\n${resposta}\n\n---\n`;
+    const markdown = `## [${data}] por ${autor}
+
+${resposta}
+
+---\n`;
 
     fs.appendFileSync("HISTORICO.md", markdown);
     console.log("✅ Histórico atualizado com IA");
+
+    // Realizar um novo commit
+    execSync("git add HISTORICO.md");
+    execSync(`git commit -m "Atualiza HISTORICO.md com resumo gerado pela IA"`);
+    console.log("✅ Novo commit criado para o histórico");
   } catch (error) {
     console.error("❌ Ocorreu um erro ao gerar o resumo:", error.message);
   }
 }
 
-gerarResumo();
+// Verificar se houve um commit antes de executar o resumo
+function verificarCommit() {
+  try {
+    const ultimoCommit = execSync("git log -1 --pretty=format:'%H'").toString().trim();
+    const status = execSync("git diff --name-only HEAD").toString().trim();
+
+    if (!status) {
+      console.log("Nenhuma alteração detectada. Aguardando novos commits...");
+      return;
+    }
+
+    gerarResumo();
+  } catch (error) {
+    console.error("❌ Erro ao verificar commit:", error.message);
+  }
+}
+
+// Executar a verificação de commit
+verificarCommit();
