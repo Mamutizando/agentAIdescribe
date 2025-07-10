@@ -1,1 +1,0 @@
-## Resumo automático do último commit:

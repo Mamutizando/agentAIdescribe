@@ -1,11 +1,10 @@
 {
   "name": "tst-automation-loja",
   "scripts": {
-    "gerar-doc": "node utils/gerarDoc.js"
+    "gerar-doc": "node utils/gerarDoc.js",
+    "type": "module"
   },
   "dependencies": {
-    "dotenv": "^16.5.0",
-    "openai": "^4.98.0",
     "playwright": "^1.52.0"
   },
   "devDependencies": {
